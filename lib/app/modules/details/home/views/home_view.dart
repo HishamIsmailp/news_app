@@ -6,6 +6,8 @@ import '../widgets/search_bar.dart';
 import '../widgets/error_view.dart';
 
 class HomeView extends GetView<HomeController> {
+  const HomeView({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

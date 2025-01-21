@@ -4,11 +4,13 @@ import 'package:cached_network_image/cached_network_image.dart';
 import '../controllers/details_controller.dart';
 
 class DetailsView extends GetView<DetailsController> {
+  const DetailsView({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Article Details'),
+        title: const Text('Article Details'),
       ),
       body: Obx(
         () => controller.article.value == null
@@ -26,7 +28,8 @@ class DetailsView extends GetView<DetailsController> {
                         placeholder: (context, url) => Container(
                           height: 250,
                           color: Colors.grey[300],
-                          child: const Center(child: CircularProgressIndicator()),
+                          child:
+                              const Center(child: CircularProgressIndicator()),
                         ),
                         errorWidget: (context, url, error) => Container(
                           height: 250,

@@ -6,7 +6,7 @@ void main() {
   runApp(
     GetMaterialApp(
       title: "News App",
-      initialRoute: AppPages.INITIAL,
+      initialRoute: AppPages.initial,
       getPages: AppPages.routes,
       theme: ThemeData(
         primarySwatch: Colors.blue,

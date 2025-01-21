@@ -6,17 +6,17 @@ import 'package:news_app/app/modules/details/views/details_view.dart';
 import 'package:news_app/routes/app_pages.dart';
 
 class AppPages {
-  static const INITIAL = Routes.HOME;
+  static const initial = Routes.home;
 
   static final routes = [
     GetPage(
-      name: Routes.HOME,
-      page: () => HomeView(),
+      name: Routes.home,
+      page: () => const HomeView(),
       binding: HomeBinding(),
     ),
     GetPage(
-      name: Routes.DETAILS,
-      page: () => DetailsView(),
+      name: Routes.details,
+      page: () => const DetailsView(),
       binding: DetailsBinding(),
     ),
   ];

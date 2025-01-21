@@ -14,7 +14,7 @@ class ArticleCard extends StatelessWidget {
     return Card(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: InkWell(
-        onTap: () => Get.toNamed(Routes.DETAILS, arguments: article),
+        onTap: () => Get.toNamed(Routes.details, arguments: article),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
