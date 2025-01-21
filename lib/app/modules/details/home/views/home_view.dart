@@ -10,7 +10,7 @@ class HomeView extends GetView<HomeController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('News App'),
+        title: const Text('News App'),
       ),
       body: Column(
         children: [
@@ -52,13 +52,13 @@ class HomeView extends GetView<HomeController> {
         itemBuilder: (context, index) {
           if (index == controller.articles.length) {
             return Obx(() => controller.isLoading.value
-                ? Center(
+                ? const Center(
                     child: Padding(
                       padding: EdgeInsets.all(16.0),
                       child: CircularProgressIndicator(),
                     ),
                   )
-                : SizedBox.shrink());
+                : const SizedBox.shrink());
           }
           return ArticleCard(article: controller.articles[index]);
         },

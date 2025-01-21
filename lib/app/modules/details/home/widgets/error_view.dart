@@ -5,10 +5,10 @@ class ErrorView extends StatelessWidget {
   final VoidCallback onRetry;
 
   const ErrorView({
-    Key? key,
+    super.key,
     required this.message,
     required this.onRetry,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -16,20 +16,20 @@ class ErrorView extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(
+          const Icon(
             Icons.error_outline,
             size: 48,
             color: Colors.red,
           ),
-          SizedBox(height: 16),
-          Text(
+          const SizedBox(height: 16),
+          const Text(
             'Error loading news',
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.bold,
             ),
           ),
-          SizedBox(height: 8),
+          const SizedBox(height: 8),
           Text(
             message,
             textAlign: TextAlign.center,
@@ -38,10 +38,10 @@ class ErrorView extends StatelessWidget {
               fontSize: 14,
             ),
           ),
-          SizedBox(height: 24),
+          const SizedBox(height: 24),
           ElevatedButton(
             onPressed: onRetry,
-            child: Padding(
+            child: const Padding(
               padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               child: Text(
                 'Retry',

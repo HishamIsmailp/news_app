@@ -25,7 +25,7 @@ class Article {
     if (json['title'] == '[Removed]' || 
         json['description'] == '[Removed]' || 
         json['content'] == '[Removed]') {
-      throw FormatException('Removed article');
+      throw const FormatException('Removed article');
     }
 
     return Article(

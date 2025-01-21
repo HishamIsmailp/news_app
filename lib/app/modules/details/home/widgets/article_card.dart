@@ -7,12 +7,12 @@ import 'package:news_app/routes/app_pages.dart';
 class ArticleCard extends StatelessWidget {
   final Article article;
 
-  const ArticleCard({Key? key, required this.article}) : super(key: key);
+  const ArticleCard({super.key, required this.article});
 
   @override
   Widget build(BuildContext context) {
     return Card(
-      margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: InkWell(
         onTap: () => Get.toNamed(Routes.DETAILS, arguments: article),
         child: Column(
@@ -20,7 +20,7 @@ class ArticleCard extends StatelessWidget {
           children: [
             if (article.urlToImage != null)
               ClipRRect(
-                borderRadius: BorderRadius.vertical(top: Radius.circular(4)),
+                borderRadius: const BorderRadius.vertical(top: Radius.circular(4)),
                 child: CachedNetworkImage(
                   imageUrl: article.urlToImage!,
                   height: 200,
@@ -29,28 +29,28 @@ class ArticleCard extends StatelessWidget {
                   placeholder: (context, url) => Container(
                     height: 200,
                     color: Colors.grey[300],
-                    child: Center(child: CircularProgressIndicator()),
+                    child: const Center(child: CircularProgressIndicator()),
                   ),
                   errorWidget: (context, url, error) => Container(
                     height: 200,
                     color: Colors.grey[300],
-                    child: Icon(Icons.error),
+                    child: const Icon(Icons.error),
                   ),
                 ),
               ),
             Padding(
-              padding: EdgeInsets.all(16),
+              padding: const EdgeInsets.all(16),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     article.title,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  SizedBox(height: 8),
+                  const SizedBox(height: 8),
                   Text(
                     article.description,
                     style: TextStyle(
@@ -60,13 +60,13 @@ class ArticleCard extends StatelessWidget {
                     maxLines: 3,
                     overflow: TextOverflow.ellipsis,
                   ),
-                  SizedBox(height: 16),
+                  const SizedBox(height: 16),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
                         article.sourceName,
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontWeight: FontWeight.w500,
                           color: Colors.blue,
                         ),

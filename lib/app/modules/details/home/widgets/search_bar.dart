@@ -3,16 +3,16 @@ import 'package:flutter/material.dart';
 class NewsSearchBar extends StatelessWidget {
   final Function(String) onSearch;
 
-  const NewsSearchBar({Key? key, required this.onSearch}) : super(key: key);
+  const NewsSearchBar({super.key, required this.onSearch});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(16),
+      padding: const EdgeInsets.all(16),
       child: TextField(
         decoration: InputDecoration(
           hintText: 'Search news...',
-          prefixIcon: Icon(Icons.search),
+          prefixIcon: const Icon(Icons.search),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(30),
           ),

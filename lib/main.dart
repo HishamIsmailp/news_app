@@ -11,7 +11,7 @@ void main() {
       theme: ThemeData(
         primarySwatch: Colors.blue,
         scaffoldBackgroundColor: Colors.grey[100],
-        appBarTheme: AppBarTheme(
+        appBarTheme: const AppBarTheme(
           elevation: 0,
           backgroundColor: Colors.white,
           foregroundColor: Colors.black,
