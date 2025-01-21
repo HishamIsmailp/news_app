@@ -20,21 +20,25 @@ class ArticleCard extends StatelessWidget {
           children: [
             if (article.urlToImage != null)
               ClipRRect(
-                borderRadius: const BorderRadius.vertical(top: Radius.circular(4)),
-                child: CachedNetworkImage(
-                  imageUrl: article.urlToImage!,
-                  height: 200,
-                  width: double.infinity,
-                  fit: BoxFit.cover,
-                  placeholder: (context, url) => Container(
-                    height: 200,
-                    color: Colors.grey[300],
-                    child: const Center(child: CircularProgressIndicator()),
-                  ),
-                  errorWidget: (context, url, error) => Container(
-                    height: 200,
-                    color: Colors.grey[300],
-                    child: const Icon(Icons.error),
+                borderRadius:
+                    const BorderRadius.vertical(top: Radius.circular(4)),
+                child: AspectRatio(
+                  aspectRatio: 16 / 9,
+                  child: CachedNetworkImage(
+                    imageUrl: article.urlToImage!,
+                    width: double.infinity,
+                    fit: BoxFit.cover,
+                    cacheKey: article.urlToImage,
+                    memCacheHeight: 500,
+                    memCacheWidth: 1000,
+                    placeholder: (context, url) => Container(
+                      color: Colors.grey[300],
+                      child: const Center(child: CircularProgressIndicator()),
+                    ),
+                    errorWidget: (context, url, error) => Container(
+                      color: Colors.grey[300],
+                      child: const Icon(Icons.error),
+                    ),
                   ),
                 ),
               ),

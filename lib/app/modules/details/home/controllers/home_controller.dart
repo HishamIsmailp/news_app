@@ -3,7 +3,8 @@ import 'package:news_app/app/data/models/article_model.dart';
 import 'package:news_app/app/data/repositories/news_repository.dart';
 
 class HomeController extends GetxController {
-  final NewsRepository newsRepository;
+ final NewsRepository newsRepository;
+ final hasReachedMax = false.obs;
   
   HomeController({required this.newsRepository});
 
@@ -22,12 +23,18 @@ class HomeController extends GetxController {
   }
 
   Future<void> fetchTopHeadlines() async {
-    if (isLoading.value) return;
+    if (isLoading.value || hasReachedMax.value) return;
     
     try {
       isLoading.value = true;
       hasError.value = false;
       final newArticles = await newsRepository.getTopHeadlines(page.value);
+      
+      if (newArticles.isEmpty) {
+        hasReachedMax.value = true;
+        return;
+      }
+      
       if (page.value == 1) {
         articles.clear();
       }
@@ -35,7 +42,12 @@ class HomeController extends GetxController {
       page.value++;
     } catch (e) {
       hasError.value = true;
-      errorMessage.value = e.toString();
+      if (e.toString().contains('maximumResultsReached')) {
+        hasReachedMax.value = true;
+        errorMessage.value = 'You have reached the maximum number of results available.';
+      } else {
+        errorMessage.value = e.toString();
+      }
     } finally {
       isLoading.value = false;
       refreshController.value = false;

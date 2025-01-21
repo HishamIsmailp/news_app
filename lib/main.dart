@@ -1,8 +1,11 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:news_app/routes/app_routes.dart';
 
 void main() {
+  CachedNetworkImage.logLevel = CacheManagerLogLevel.verbose;
+  
   runApp(
     GetMaterialApp(
       title: "News App",
@@ -25,7 +28,6 @@ void main() {
     ),
   );
 }
-
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});

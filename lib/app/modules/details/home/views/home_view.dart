@@ -40,7 +40,8 @@ class HomeView extends GetView<HomeController> {
   Widget _buildNewsList() {
     return NotificationListener<ScrollNotification>(
       onNotification: (ScrollNotification scrollInfo) {
-        if (scrollInfo.metrics.pixels == scrollInfo.metrics.maxScrollExtent) {
+        if (!controller.hasReachedMax.value &&
+            scrollInfo.metrics.pixels == scrollInfo.metrics.maxScrollExtent) {
           if (controller.searchQuery.isEmpty) {
             controller.fetchTopHeadlines();
           } else {
@@ -50,17 +51,35 @@ class HomeView extends GetView<HomeController> {
         return true;
       },
       child: ListView.builder(
+        cacheExtent: 1000,
+        addAutomaticKeepAlives: true,
         itemCount: controller.articles.length + 1,
         itemBuilder: (context, index) {
           if (index == controller.articles.length) {
-            return Obx(() => controller.isLoading.value
-                ? const Center(
-                    child: Padding(
-                      padding: EdgeInsets.all(16.0),
-                      child: CircularProgressIndicator(),
+            return Obx(() {
+              if (controller.hasReachedMax.value) {
+                return const Padding(
+                  padding: EdgeInsets.all(16.0),
+                  child: Center(
+                    child: Text(
+                      'No more articles available',
+                      style: TextStyle(
+                        color: Colors.grey,
+                        fontSize: 14,
+                      ),
                     ),
-                  )
-                : const SizedBox.shrink());
+                  ),
+                );
+              }
+              return controller.isLoading.value
+                  ? const Center(
+                      child: Padding(
+                        padding: EdgeInsets.all(16.0),
+                        child: CircularProgressIndicator(),
+                      ),
+                    )
+                  : const SizedBox.shrink();
+            });
           }
           return ArticleCard(article: controller.articles[index]);
         },
