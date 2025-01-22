@@ -119,6 +119,10 @@ class HomeController extends GetxController {
         hasErrorAllNews.value = false;
         fetchAllNews();
       }
+
+      if (scrollController.hasClients) {
+        scrollController.jumpTo(0);
+      }
     });
   }
 
