@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:news_app/app/core/utils/responsive_helper.dart';
 import 'package:news_app/app/data/models/article_model.dart';
 import 'package:news_app/app/modules/details/home/widgets/news_image_placeholder.dart';
 import 'package:news_app/routes/app_pages.dart';
@@ -12,11 +13,12 @@ class TopHeadlineCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
+      color: const Color.fromARGB(255, 237, 242, 252),
       margin: const EdgeInsets.symmetric(horizontal: 8),
       child: InkWell(
         onTap: () => Get.toNamed(Routes.details, arguments: article),
         child: SizedBox(
-          width: 280,
+          width: ResponsiveHelper.screenWidth(context) * 0.7,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -40,13 +42,13 @@ class TopHeadlineCard extends StatelessWidget {
                       Text(
                         article.title,
                         style: const TextStyle(
-                          fontSize: 16,
+                          fontSize: 14,
                           fontWeight: FontWeight.bold,
                         ),
-                        maxLines: 2,
+                        maxLines: 3,
                         overflow: TextOverflow.ellipsis,
                       ),
-                      const SizedBox(height: 8),
+                      const SizedBox(height: 7),
                       const Spacer(),
                       Text(
                         article.sourceName,
@@ -55,7 +57,7 @@ class TopHeadlineCard extends StatelessWidget {
                           color: Colors.blue,
                         ),
                       ),
-                      const SizedBox(height: 4),
+                      const SizedBox(height: 3),
                       Text(
                         article.publishedAt,
                         style: TextStyle(
@@ -71,6 +73,6 @@ class TopHeadlineCard extends StatelessWidget {
           ),
         ),
       ),
-    );
+    ).paddingOnly(bottom: ResponsiveHelper.screenHeight(context) * 0.003);
   }
 }

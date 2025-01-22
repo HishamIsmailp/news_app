@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:news_app/app/core/utils/responsive_helper.dart';
 import 'package:news_app/app/modules/details/home/widgets/news_image_placeholder.dart';
 import '../controllers/details_controller.dart';
 
@@ -20,11 +22,10 @@ class DetailsView extends GetView<DetailsController> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     NewsImagePlaceholder(
-                      imageUrl: controller.article.value?.urlToImage,
-                      width: double.infinity,
-                      height: 250,
-                      fit: BoxFit.cover
-                    ),
+                        imageUrl: controller.article.value?.urlToImage,
+                        width: double.infinity,
+                        height: ResponsiveHelper.screenHeight(context) * 0.3,
+                        fit: BoxFit.cover),
                     Padding(
                       padding: const EdgeInsets.all(16),
                       child: Column(
@@ -32,12 +33,14 @@ class DetailsView extends GetView<DetailsController> {
                         children: [
                           Text(
                             controller.article.value!.title,
-                            style: const TextStyle(
-                              fontSize: 24,
+                            style: GoogleFonts.roboto(
+                              fontSize: 20,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                          const SizedBox(height: 16),
+                          SizedBox(
+                              height: ResponsiveHelper.screenHeight(context) *
+                                  0.02),
                           Row(
                             children: [
                               const Icon(Icons.newspaper, size: 16),
@@ -78,11 +81,13 @@ class DetailsView extends GetView<DetailsController> {
                               ],
                             ),
                           ],
-                          const SizedBox(height: 24),
+                          SizedBox(
+                              height: ResponsiveHelper.screenHeight(context) *
+                                  0.02),
                           Text(
                             controller.article.value!.description,
-                            style: const TextStyle(
-                              fontSize: 16,
+                            style: GoogleFonts.acme(
+                              fontSize: 15,
                               height: 1.5,
                             ),
                           ),
@@ -90,8 +95,8 @@ class DetailsView extends GetView<DetailsController> {
                             const SizedBox(height: 16),
                             Text(
                               controller.article.value!.content!,
-                              style: const TextStyle(
-                                fontSize: 16,
+                              style: GoogleFonts.acme(
+                                fontSize: 15,
                                 height: 1.5,
                               ),
                             ),

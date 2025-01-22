@@ -5,9 +5,10 @@ import 'package:news_app/routes/app_routes.dart';
 
 void main() {
   CachedNetworkImage.logLevel = CacheManagerLogLevel.verbose;
-  
+
   runApp(
     GetMaterialApp(
+      debugShowCheckedModeBanner: false,
       title: "News App",
       initialRoute: AppPages.initial,
       getPages: AppPages.routes,

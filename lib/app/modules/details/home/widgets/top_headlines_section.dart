@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:news_app/app/core/utils/responsive_helper.dart';
 import '../controllers/home_controller.dart';
 import 'top_headline_card.dart';
 
@@ -16,10 +18,11 @@ class TopHeadlinesSection extends GetView<HomeController> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text(
+              Text(
                 'Top Headlines',
-                style: TextStyle(
-                  fontSize: 20,
+                style: GoogleFonts.roboto(
+                  fontSize: 18,
+                  height: 1.5,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -41,18 +44,18 @@ class TopHeadlinesSection extends GetView<HomeController> {
           ),
         ),
         SizedBox(
-          height: 300,
+          height: ResponsiveHelper.screenHeight(context) * 0.38,
           child: Obx(() {
             if (controller.isLoadingTopHeadlines.value) {
               return const Center(child: CircularProgressIndicator());
             }
-            
+
             if (controller.hasErrorTopHeadlines.value) {
               return Center(
                 child: Text(controller.errorMessageTopHeadlines.value),
               );
             }
-            
+
             return ListView.builder(
               scrollDirection: Axis.horizontal,
               padding: const EdgeInsets.symmetric(horizontal: 8),

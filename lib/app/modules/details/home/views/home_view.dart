@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 import '../controllers/home_controller.dart';
 import '../widgets/article_card.dart';
 import '../widgets/search_bar.dart';
@@ -11,9 +13,31 @@ class HomeView extends GetView<HomeController> {
 
   @override
   Widget build(BuildContext context) {
+    DateTime now = DateTime.now();
+
+    String month = DateFormat.MMMM().format(now);
+    String dayNumber = DateFormat.d().format(now);
+    String dayName = DateFormat.EEEE().format(now);
+
+    String formattedDate = "$month $dayNumber, $dayName";
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
-        title: const Text('News App'),
+        backgroundColor: Colors.white,
+        title: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            const Text(
+              'Today',
+              style: TextStyle(fontSize: 18),
+            ),
+            Text(
+              formattedDate,
+              style: const TextStyle(fontSize: 18),
+            ),
+          ],
+        ),
+        centerTitle: true,
       ),
       body: RefreshIndicator(
         onRefresh: controller.refreshNews,
@@ -29,18 +53,19 @@ class HomeView extends GetView<HomeController> {
                   Obx(() => controller.searchQuery.isEmpty
                       ? const TopHeadlinesSection()
                       : const SizedBox.shrink()),
-
                   Padding(
                     padding: const EdgeInsets.all(16),
                     child: Obx(() => Text(
-                      controller.searchQuery.isEmpty ? 'All News' : 'Search Results',
-                      style: const TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    )),
+                          controller.searchQuery.isEmpty
+                              ? 'All News'
+                              : 'Search Results',
+                          style: GoogleFonts.roboto(
+                            fontSize: 18,
+                            height: 1.5,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        )),
                   ),
-                  
                   Obx(() {
                     if (controller.hasErrorAllNews.value) {
                       return ErrorView(
@@ -52,9 +77,8 @@ class HomeView extends GetView<HomeController> {
                     return Column(
                       children: [
                         ...controller.allNews.map((article) => ArticleCard(
-                          article: article,
-                        )),
-                        
+                              article: article,
+                            )),
                         if (controller.hasReachedMaxAllNews.value)
                           const Padding(
                             padding: EdgeInsets.all(16.0),
