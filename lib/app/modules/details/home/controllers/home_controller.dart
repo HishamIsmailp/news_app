@@ -1,90 +1,108 @@
 import 'package:get/get.dart';
+import 'package:flutter/material.dart';
 import 'package:news_app/app/data/models/article_model.dart';
 import 'package:news_app/app/data/repositories/news_repository.dart';
 
 class HomeController extends GetxController {
- final NewsRepository newsRepository;
- final hasReachedMax = false.obs;
+  final NewsRepository newsRepository;
+  final scrollController = ScrollController();
   
   HomeController({required this.newsRepository});
-
-  final articles = <Article>[].obs;
-  final isLoading = false.obs;
-  final hasError = false.obs;
-  final errorMessage = ''.obs;
-  final page = 1.obs;
+  
+  final topHeadlines = <Article>[].obs;
+  final isLoadingTopHeadlines = false.obs;
+  final hasErrorTopHeadlines = false.obs;
+  final errorMessageTopHeadlines = ''.obs;
+  
+  final allNews = <Article>[].obs;
+  final isLoadingAllNews = false.obs;
+  final hasErrorAllNews = false.obs;
+  final errorMessageAllNews = ''.obs;
+  final hasReachedMaxAllNews = false.obs;
+  final allNewsPage = 1.obs;
+  
   final searchQuery = ''.obs;
-  final refreshController = RxBool(false);
-
+  
   @override
   void onInit() {
     super.onInit();
     fetchTopHeadlines();
+    fetchAllNews();
+    setupScrollController();
   }
 
+  void setupScrollController() {
+    scrollController.addListener(() {
+      if (scrollController.position.pixels == scrollController.position.maxScrollExtent) {
+        fetchAllNews();
+      }
+    });
+  }
+
+  @override
+  void onClose() {
+    scrollController.dispose();
+    super.onClose();
+  }
+  
   Future<void> fetchTopHeadlines() async {
-    if (isLoading.value || hasReachedMax.value) return;
+    try {
+      isLoadingTopHeadlines.value = true;
+      hasErrorTopHeadlines.value = false;
+      final articles = await newsRepository.getTopHeadlines(1);
+      topHeadlines.value = articles;
+    } catch (e) {
+      hasErrorTopHeadlines.value = true;
+      errorMessageTopHeadlines.value = e.toString();
+    } finally {
+      isLoadingTopHeadlines.value = false;
+    }
+  }
+  
+  Future<void> fetchAllNews() async {
+    if (isLoadingAllNews.value || hasReachedMaxAllNews.value) return;
     
     try {
-      isLoading.value = true;
-      hasError.value = false;
-      final newArticles = await newsRepository.getTopHeadlines(page.value);
+      isLoadingAllNews.value = true;
+      hasErrorAllNews.value = false;
+      
+      final newArticles = await newsRepository.searchNews(
+        searchQuery.isEmpty ? 'news' : searchQuery.value,
+        allNewsPage.value
+      );
       
       if (newArticles.isEmpty) {
-        hasReachedMax.value = true;
+        hasReachedMaxAllNews.value = true;
         return;
       }
       
-      if (page.value == 1) {
-        articles.clear();
+      if (allNewsPage.value == 1) {
+        allNews.clear();
       }
-      articles.addAll(newArticles);
-      page.value++;
-    } catch (e) {
-      hasError.value = true;
-      if (e.toString().contains('maximumResultsReached')) {
-        hasReachedMax.value = true;
-        errorMessage.value = 'You have reached the maximum number of results available.';
-      } else {
-        errorMessage.value = e.toString();
-      }
-    } finally {
-      isLoading.value = false;
-      refreshController.value = false;
-    }
-  }
-
-  Future<void> searchNews(String query) async {
-    if (query.isEmpty) {
-      page.value = 1;
-      await fetchTopHeadlines();
-      return;
-    }
-
-    try {
-      isLoading.value = true;
-      hasError.value = false;
-      searchQuery.value = query;
-      page.value = 1;
-      articles.clear();
       
-      final newArticles = await newsRepository.searchNews(query, page.value);
-      articles.addAll(newArticles);
-      page.value++;
+      allNews.addAll(newArticles);
+      allNewsPage.value++;
     } catch (e) {
-      hasError.value = true;
-      errorMessage.value = e.toString();
+      hasErrorAllNews.value = true;
+      errorMessageAllNews.value = e.toString();
     } finally {
-      isLoading.value = false;
+      isLoadingAllNews.value = false;
     }
   }
-
+  
+  Future<void> searchNews(String query) async {
+    searchQuery.value = query;
+    allNewsPage.value = 1;
+    hasReachedMaxAllNews.value = false;
+    await fetchAllNews();
+  }
+  
   Future<void> refreshNews() async {
-    page.value = 1;
-    if (searchQuery.isEmpty) {
-      await fetchTopHeadlines();
-    } else {
-      await searchNews(searchQuery.value);
-    }
+    allNewsPage.value = 1;
+    hasReachedMaxAllNews.value = false;
+    await Future.wait([
+      fetchTopHeadlines(),
+      fetchAllNews(),
+    ]);
   }
 }

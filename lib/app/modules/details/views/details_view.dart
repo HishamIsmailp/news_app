@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:news_app/app/modules/details/home/widgets/news_image_placeholder.dart';
 import '../controllers/details_controller.dart';
 
 class DetailsView extends GetView<DetailsController> {
@@ -19,24 +19,12 @@ class DetailsView extends GetView<DetailsController> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    if (controller.article.value?.urlToImage != null)
-                      CachedNetworkImage(
-                        imageUrl: controller.article.value!.urlToImage!,
-                        height: 250,
-                        width: double.infinity,
-                        fit: BoxFit.cover,
-                        placeholder: (context, url) => Container(
-                          height: 250,
-                          color: Colors.grey[300],
-                          child:
-                              const Center(child: CircularProgressIndicator()),
-                        ),
-                        errorWidget: (context, url, error) => Container(
-                          height: 250,
-                          color: Colors.grey[300],
-                          child: const Icon(Icons.error),
-                        ),
-                      ),
+                    NewsImagePlaceholder(
+                      imageUrl: controller.article.value?.urlToImage,
+                      width: double.infinity,
+                      height: 250,
+                      fit: BoxFit.cover
+                    ),
                     Padding(
                       padding: const EdgeInsets.all(16),
                       child: Column(

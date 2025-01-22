@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:news_app/app/data/models/article_model.dart';
+import 'package:news_app/app/modules/details/home/widgets/news_image_placeholder.dart';
 import 'package:news_app/routes/app_pages.dart';
 
 class ArticleCard extends StatelessWidget {
@@ -18,30 +18,16 @@ class ArticleCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            if (article.urlToImage != null)
-              ClipRRect(
-                borderRadius:
-                    const BorderRadius.vertical(top: Radius.circular(4)),
-                child: AspectRatio(
+            ClipRRect(
+              borderRadius:
+                  const BorderRadius.vertical(top: Radius.circular(4)),
+              child: AspectRatio(
                   aspectRatio: 16 / 9,
-                  child: CachedNetworkImage(
-                    imageUrl: article.urlToImage!,
+                  child: NewsImagePlaceholder(
+                    imageUrl: article.urlToImage,
                     width: double.infinity,
-                    fit: BoxFit.cover,
-                    cacheKey: article.urlToImage,
-                    memCacheHeight: 500,
-                    memCacheWidth: 1000,
-                    placeholder: (context, url) => Container(
-                      color: Colors.grey[300],
-                      child: const Center(child: CircularProgressIndicator()),
-                    ),
-                    errorWidget: (context, url, error) => Container(
-                      color: Colors.grey[300],
-                      child: const Icon(Icons.error),
-                    ),
-                  ),
-                ),
-              ),
+                  )),
+            ),
             Padding(
               padding: const EdgeInsets.all(16),
               child: Column(

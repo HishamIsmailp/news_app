@@ -4,6 +4,7 @@ import '../controllers/home_controller.dart';
 import '../widgets/article_card.dart';
 import '../widgets/search_bar.dart';
 import '../widgets/error_view.dart';
+import '../widgets/top_headlines_section.dart';
 
 class HomeView extends GetView<HomeController> {
   const HomeView({super.key});
@@ -14,75 +15,74 @@ class HomeView extends GetView<HomeController> {
       appBar: AppBar(
         title: const Text('News App'),
       ),
-      body: Column(
-        children: [
-          NewsSearchBar(
-            onSearch: controller.searchNews,
-          ),
-          Expanded(
-            child: Obx(
-              () => RefreshIndicator(
-                onRefresh: controller.refreshNews,
-                child: controller.hasError.value
-                    ? ErrorView(
-                        message: controller.errorMessage.value,
+      body: RefreshIndicator(
+        onRefresh: controller.refreshNews,
+        child: Column(
+          children: [
+            NewsSearchBar(
+              onSearch: controller.searchNews,
+            ),
+            Expanded(
+              child: ListView(
+                controller: controller.scrollController,
+                children: [
+                  Obx(() => controller.searchQuery.isEmpty
+                      ? const TopHeadlinesSection()
+                      : const SizedBox.shrink()),
+
+                  Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: Obx(() => Text(
+                      controller.searchQuery.isEmpty ? 'All News' : 'Search Results',
+                      style: const TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    )),
+                  ),
+                  
+                  Obx(() {
+                    if (controller.hasErrorAllNews.value) {
+                      return ErrorView(
+                        message: controller.errorMessageAllNews.value,
                         onRetry: controller.refreshNews,
-                      )
-                    : _buildNewsList(),
+                      );
+                    }
+
+                    return Column(
+                      children: [
+                        ...controller.allNews.map((article) => ArticleCard(
+                          article: article,
+                        )),
+                        
+                        if (controller.hasReachedMaxAllNews.value)
+                          const Padding(
+                            padding: EdgeInsets.all(16.0),
+                            child: Center(
+                              child: Text(
+                                'No more articles available',
+                                style: TextStyle(
+                                  color: Colors.grey,
+                                  fontSize: 14,
+                                ),
+                              ),
+                            ),
+                          )
+                        else if (controller.isLoadingAllNews.value)
+                          const Padding(
+                            padding: EdgeInsets.all(16.0),
+                            child: Center(
+                              child: CircularProgressIndicator(),
+                            ),
+                          ),
+                      ],
+                    );
+                  }),
+                ],
               ),
             ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildNewsList() {
-    return NotificationListener<ScrollNotification>(
-      onNotification: (ScrollNotification scrollInfo) {
-        if (!controller.hasReachedMax.value &&
-            scrollInfo.metrics.pixels == scrollInfo.metrics.maxScrollExtent) {
-          if (controller.searchQuery.isEmpty) {
-            controller.fetchTopHeadlines();
-          } else {
-            controller.searchNews(controller.searchQuery.value);
-          }
-        }
-        return true;
-      },
-      child: ListView.builder(
-        cacheExtent: 1000,
-        addAutomaticKeepAlives: true,
-        itemCount: controller.articles.length + 1,
-        itemBuilder: (context, index) {
-          if (index == controller.articles.length) {
-            return Obx(() {
-              if (controller.hasReachedMax.value) {
-                return const Padding(
-                  padding: EdgeInsets.all(16.0),
-                  child: Center(
-                    child: Text(
-                      'No more articles available',
-                      style: TextStyle(
-                        color: Colors.grey,
-                        fontSize: 14,
-                      ),
-                    ),
-                  ),
-                );
-              }
-              return controller.isLoading.value
-                  ? const Center(
-                      child: Padding(
-                        padding: EdgeInsets.all(16.0),
-                        child: CircularProgressIndicator(),
-                      ),
-                    )
-                  : const SizedBox.shrink();
-            });
-          }
-          return ArticleCard(article: controller.articles[index]);
-        },
+          ],
+        ),
       ),
     );
   }
