@@ -59,9 +59,8 @@ class HomeView extends GetView<HomeController> {
                           controller.searchQuery.isEmpty
                               ? 'All News'
                               : 'Search Results',
-                          style: GoogleFonts.roboto(
-                            fontSize: 18,
-                            height: 1.5,
+                          style: const TextStyle(
+                            fontSize: 20,
                             fontWeight: FontWeight.bold,
                           ),
                         )),
@@ -71,6 +70,29 @@ class HomeView extends GetView<HomeController> {
                       return ErrorView(
                         message: controller.errorMessageAllNews.value,
                         onRetry: controller.refreshNews,
+                      );
+                    }
+
+                    if (controller.noSearchResults.value) {
+                      return Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Icon(
+                              Icons.search_off,
+                              size: 48,
+                              color: Colors.grey,
+                            ),
+                            const SizedBox(height: 16),
+                            Text(
+                              'No results found for "${controller.searchQuery.value}"',
+                              style: const TextStyle(
+                                fontSize: 16,
+                                color: Colors.grey,
+                              ),
+                            ),
+                          ],
+                        ),
                       );
                     }
 

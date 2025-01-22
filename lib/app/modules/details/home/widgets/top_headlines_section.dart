@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:news_app/app/core/utils/responsive_helper.dart';
+import 'package:news_app/app/modules/details/home/widgets/error_view.dart';
 import '../controllers/home_controller.dart';
 import 'top_headline_card.dart';
 
@@ -52,7 +53,10 @@ class TopHeadlinesSection extends GetView<HomeController> {
 
             if (controller.hasErrorTopHeadlines.value) {
               return Center(
-                child: Text(controller.errorMessageTopHeadlines.value),
+                child: ErrorView(
+                  message: controller.errorMessageAllNews.value,
+                  onRetry: controller.refreshNews,
+                ),
               );
             }
 
