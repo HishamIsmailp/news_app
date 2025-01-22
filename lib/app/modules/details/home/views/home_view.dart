@@ -29,18 +29,18 @@ class HomeView extends GetView<HomeController> {
                   Obx(() => controller.searchQuery.isEmpty
                       ? const TopHeadlinesSection()
                       : const SizedBox.shrink()),
-
                   Padding(
                     padding: const EdgeInsets.all(16),
                     child: Obx(() => Text(
-                      controller.searchQuery.isEmpty ? 'All News' : 'Search Results',
-                      style: const TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    )),
+                          controller.searchQuery.isEmpty
+                              ? 'All News'
+                              : 'Search Results',
+                          style: const TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        )),
                   ),
-                  
                   Obx(() {
                     if (controller.hasErrorAllNews.value) {
                       return ErrorView(
@@ -49,12 +49,34 @@ class HomeView extends GetView<HomeController> {
                       );
                     }
 
+                    if (controller.noSearchResults.value) {
+                      return Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Icon(
+                              Icons.search_off,
+                              size: 48,
+                              color: Colors.grey,
+                            ),
+                            const SizedBox(height: 16),
+                            Text(
+                              'No results found for "${controller.searchQuery.value}"',
+                              style: const TextStyle(
+                                fontSize: 16,
+                                color: Colors.grey,
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
+                    }
+
                     return Column(
                       children: [
                         ...controller.allNews.map((article) => ArticleCard(
-                          article: article,
-                        )),
-                        
+                              article: article,
+                            )),
                         if (controller.hasReachedMaxAllNews.value)
                           const Padding(
                             padding: EdgeInsets.all(16.0),
